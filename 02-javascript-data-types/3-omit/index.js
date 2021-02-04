@@ -5,7 +5,7 @@
  * @returns {object} - returns the new object
  */
 export const omit = (obj, ...fields) => {
-  let tempArray = [];
+  const tempArray = [];
   Object.entries(obj).forEach(([key, value]) => {
     if (!fields.includes(key)) {
       tempArray.push([key, value]);

@@ -5,7 +5,7 @@
  * @returns {object} - returns the new object
  */
 export const pick = (obj, ...fields) => {
-  let tempArray = [];
+  const tempArray = [];
 
   Object.entries(obj).forEach(([key, value]) => {
     if (fields.includes(key)) {
@@ -35,7 +35,7 @@ export const pick = (obj, ...fields) => {
 
 // forEach
 /* const pick2 = (obj, ...fields) => {
-  let tempArray = [];
+  const tempArray = [];
   Object.entries(obj).forEach(([key, value]) => {
     fields.forEach((el) => {
       if (key === el) {
