@@ -1,8 +1,10 @@
 export default class ColumnChart {
+  subElements = {};
+
   constructor(props = {}) {
     const {data = [], label = '', value = 0, link = '', chartHeight = 50} = props;
 
-    this.emptyClass = 'column-chart_loading';
+    this.loadingClass = 'column-chart_loading';
 
     this.data = data;
     this.label = label;
@@ -26,8 +28,8 @@ export default class ColumnChart {
     });
   }
 
-  getColumnTemplate() {
-    return this.getColumnProps(this.data).map((item) => {
+  getColumnTemplate(data) {
+    return this.getColumnProps(data).map((item) => {
       return `<div style="--value: ${item.value}" data-tooltip="${item.percent}"></div>`
     }).join('')
   }
@@ -36,7 +38,7 @@ export default class ColumnChart {
     const element = document.createElement('div');
 
     element.innerHTML = `
-      <div class="column-chart ${!this.data.length ? this.emptyClass : ''}" style="--chart-height: ${this.chartHeight}">
+      <div class="column-chart ${!this.data.length ? this.loadingClass : ''}" style="--chart-height: ${this.chartHeight}">
       <div class="column-chart__title">
         Total ${this.label}
 
@@ -52,7 +54,7 @@ export default class ColumnChart {
         </div>
 
         <div data-element="body" class="column-chart__chart">
-            ${this.data && this.data.length ? this.getColumnTemplate() : ''}
+            ${this.data && this.data.length ? this.getColumnTemplate(this.data) : ''}
         </div>
 
       </div>
@@ -60,10 +62,21 @@ export default class ColumnChart {
     `;
 
     this.element = element.firstElementChild;
+    this.subElements = this.getSubElements(this.element);
   }
 
-  update() {
+  getSubElements(element) {
+    const elements = element.querySelectorAll('[data-element]');
+    return [...elements].reduce((accum, subElement) => {
+      accum[subElement.dataset.element] = subElement;
 
+      return accum;
+    }, {});
+  }
+
+  update(data) {
+    this.getColumnProps(data);
+    this.subElements.body.innerHTML = this.getColumnTemplate(data);
   }
 
   remove () {
@@ -72,5 +85,6 @@ export default class ColumnChart {
 
   destroy() {
     this.remove();
+    this.subElements = {};
   }
 }
