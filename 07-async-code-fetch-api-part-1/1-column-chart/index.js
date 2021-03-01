@@ -43,11 +43,11 @@ export default class ColumnChart {
     const fromParam = from.toISOString();
     const toParam = to.toISOString();
 
-    const response = await fetchJson(`${this.url}?from=${fromParam}&to=${toParam}`)
+    const response = await fetchJson(`${this.url}?from=${fromParam}&to=${toParam}`);
 
     if (Object.values(response).length) {
       this.subElements.header.textContent = this.getHeaderValue(response);
-      console.log('response', response);
+
       this.subElements.body.innerHTML = this.getColumnTemplate(Object.values(response));
     }
 
